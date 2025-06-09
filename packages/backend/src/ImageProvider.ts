@@ -6,14 +6,12 @@ interface IImageDocument {
     src: string;
     name: string;
     authorId: ObjectId;
-    [key: string]: any;
 }
 
 interface IUserDocument {
     _id?: ObjectId;
     username: string;
     email: string;
-    [key: string]: any;
 }
 
 export class ImageProvider {
@@ -68,6 +66,22 @@ export class ImageProvider {
         return result.matchedCount;
     }
 
+    async getImageById(imageId: string) {
+        return this.imageCollection.findOne({ _id: new ObjectId(imageId) });
+    }
+
+    async createImage(image: { src: string; name: string; authorUsername: string }) {
+        const author = await this.userCollection.findOne({ username: image.authorUsername });
+        if (!author || !author._id) {
+            throw new Error("Author not found or invalid.");
+        }
+
+        await this.imageCollection.insertOne({
+            src: image.src,
+            name: image.name,
+            authorId: author._id
+        });
+    }
 }
 
 
