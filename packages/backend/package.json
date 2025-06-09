@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "csc437-monorepo-backend",
   "version": "1.0.0",
   "main": "dist/index.js",
